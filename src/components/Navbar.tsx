@@ -1,5 +1,4 @@
 "use client";
-import { Session } from "inspector/promises";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -62,116 +61,242 @@ const totalItems = products.reduce(
   ];
 
   return (
-    <nav className="bg-neutral-primary w-full z-20 top-0 start-0 border-b border-default mb-5">
-      <div className="max-w-screen-xl flex flex-wrap lg:flex-nowrap lg:gap-10 gap-1 mx-auto items-center justify-between py-4">
-        <Link href="/" className="flex items-center">
-          <Image
-            width={150}
-            height={100}
-            quality={75}
-            src="/e-images/freshcart-logo.svg"
-            alt="freshcart logo"
-          />
-        </Link>
-        <button
-          onClick={toggleMenu}
-          data-collapse-toggle="navbar-default"
-          type="button"
-          className="cursor-pointer inline-flex m-2 items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base lg:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
-          aria-controls="navbar-default"
-          aria-expanded="false"
+<nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-lg shadow-sm">
+
+  <div className="max-w-screen-xl mx-auto flex flex-wrap lg:flex-nowrap items-center justify-between px-4 py-4">
+
+    {/* LOGO */}
+    <Link href="/" className="flex items-center me-10">
+      <Image
+        width={150}
+        height={100}
+        quality={75}
+        src="/e-images/freshcart-logo.svg"
+        alt="freshcart logo"
+        className="hover:scale-105 transition-transform duration-300"
+      />
+    </Link>
+
+    {/* TOGGLE BUTTON */}
+    <button
+      onClick={toggleMenu}
+      type="button"
+      className="
+        lg:hidden
+        flex items-center justify-center
+        w-11 h-11
+        rounded-2xl
+        border border-gray-200
+        bg-white
+        text-green-600
+        shadow-sm
+        hover:bg-green-50
+        transition-all duration-300
+      "
+    >
+      <svg
+        className="w-6 h-6"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d={
+            Toggle
+              ? "M4 6h16M4 12h16M4 18h16"
+              : "M6 18L18 6M6 6l12 12"
+          }
+        />
+      </svg>
+    </button>
+
+    {/* MENU CONTAINER */}
+    <div
+      className={`
+        ${Toggle ? "hidden" : "flex"}
+
+        flex-col lg:flex-row
+        w-full
+
+        lg:flex
+        lg:items-center
+        lg:justify-between
+
+        mt-4 lg:mt-0
+      `}
+    >
+
+      {/* MOBILE CARD ONLY */}
+      <div
+        className="
+          lg:contents
+
+          bg-white
+          rounded-3xl
+          shadow-xl
+          border border-gray-100
+
+          p-5
+        "
+      >
+
+        {/* LEFT LINKS */}
+        <ul
+          className="
+            flex flex-col lg:flex-row
+            gap-2 lg:gap-6
+            text-center lg:mt-1
+          "
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-6 h-6"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width={24}
-            height={24}
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth={2}
-              d="M5 7h14M5 12h14M5 17h14"
-            />
-          </svg>
-        </button>
-        
-        
 
-        <div
-          className={`${Toggle && "hidden"} w-full lg:flex  block justify-between`}
-          id="navbar-default"
-        >
-
-          <ul className="text-center font-medium flex flex-col p-4 lg:p-0 mt-4 border border-default rounded-base  lg:flex-row lg:space-x-8 rtl:space-x-reverse lg:mt-0 lg:border-0 lg:bg-neutral-primary">
-                                            <li className="lg:hidden block px-3 py-4 lg:py-0 bg-green-100">
-    Hi<span className="uppercase text-green-700"> {Session?.user?.name}
-    </span>
-    <i className="mx-2 fa-regular fa-face-smile-beam"></i>
-  </li>
-            {links.map((ele) => (
-              <li key={ele.content}>
-                <Link
-                  href={ele.path}
-                  className="block py-2 px-3 text-white bg-brand rounded lg:bg-transparent lg:text-fg-brand lg:p-0 "
-                  aria-current="page"
-                >
-                  {ele.content.toUpperCase()}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-<div className="ml-auto">
-            <ul className="text-center font-medium flex flex-col p-4 lg:p-0 mt-4 gap-2 border border-default rounded-base  lg:flex-row lg:space-x-8 rtl:space-x-reverse lg:mt-0 lg:border-0 lg:bg-neutral-primary">
-            {status === "authenticated"? 
+          {/* MOBILE USER */}
+          {status === "authenticated" && (
+            <li className="lg:hidden py-3 text-gray-600 border-b border-gray-300 mb-2">
+              {Session?.user?.name && (
                 <>
-                                            <li className="hidden lg:block px-3 py-4 lg:py-0 bg-green-100 text-center">
-    Hi<span className="uppercase text-green-700"> {Session?.user?.name}
-    </span>
-    <i className="mx-2 fa-regular fa-face-smile-beam"></i>
-  </li>
-<li>
-  <Link href="/cart" className="relative inline-block">
-    <i className="px-3 fa-solid fa-shopping-cart text-xl"></i>
-
-    {totalItems > 0 && (
-<span className="absolute -top-3 -right-6.5 flex items-center justify-center min-w-[20px] leading-none pt-[1px] pe-[5px] h-5 px-1 text-[10px] font-bold text-white bg-green-500 rounded-full shadow-md">
-          {totalItems}
-      </span>
-    )}
-  </Link>
-</li>
-            <li className="px-3 uppercase cursor-pointer" onClick={logout}>Log out</li>
-
+                  Hi
+                  <span className="ml-2 uppercase text-green-600 font-semibold">
+                    {Session?.user?.name}
+                  </span>
                 </>
-                :
-                <>
-                 {auth.map((ele) => (
-                <li key={ele.content}>
+              )}
+            </li>
+          )}
+
+          {links.map((ele) => (
+            <li key={ele.content}>
+              <Link
+                href={ele.path}
+                className="
+                  block
+                  px-4 py-2
+                  rounded-xl
+                  text-sm
+                  uppercase
+                  tracking-wide
+                  font-normal
+                  text-gray-700
+                  hover:text-green-600
+                  hover:bg-green-100
+                  transition-all duration-300
+                "
+              >
+                {ele.content}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* RIGHT SIDE */}
+        <div className="lg:ml-auto">
+
+          <ul
+            className="
+              mt-6 lg:mt-0
+              flex flex-col lg:flex-row
+              items-center
+              gap-5
+            "
+          >
+
+            {status === "authenticated" ? (
+              <>
+                {/* DESKTOP USER */}
+                <li className="hidden lg:flex items-center text-gray-600 font-medium">
+                  Hi
+                  <span className="ml-2 uppercase text-green-600">
+                    {Session?.user?.name}
+                  </span>
+                </li>
+
+                {/* CART */}
+                <li>
                   <Link
-                    href={ele.path}
-                    className="block py-2 px-3 text-white bg-brand rounded lg:bg-transparent lg:text-fg-brand lg:p-0 "
-                    aria-current="page"
+                    href="/cart"
+                    className="relative flex items-center justify-center"
                   >
-                    {ele.content.toUpperCase()}
+                    <i className="fa-solid fa-shopping-cart text-2xl text-gray-700 hover:text-green-600 transition duration-300"></i>
+
+                    {totalItems > 0 && (
+                      <span
+                        className="
+                          absolute
+                          -top-2
+                          -right-3
+                          min-w-[20px]
+                          h-5
+                          px-1
+                          rounded-full
+                          bg-green-500
+                          text-white
+                          text-[10px]
+                          font-bold
+                          flex items-center justify-center
+                          shadow-md
+                        "
+                      >
+                        {totalItems}
+                      </span>
+                    )}
                   </Link>
                 </li>
-              ))}
+
+                {/* LOGOUT */}
+                <li
+                  onClick={logout}
+                  className="
+                    cursor-pointer
+                    px-4 py-2
+                    rounded-xl
+                    text-sm
+                    uppercase
+                    tracking-wide
+                    font-normal
+                    text-gray-700
+                    hover:text-red-500
+                    hover:bg-red-50
+                    transition-all duration-300
+                  "
+                >
+                  Logout
+                </li>
               </>
-            }
+            ) : (
+              <>
+                {auth.map((ele) => (
+                  <li key={ele.content}>
+                    <Link
+                      href={ele.path}
+                      className="
+                        block
+                        px-4 py-2
+                        rounded-xl
+                        text-sm
+                        uppercase
+                        tracking-wide
+                        font-normal
+                        text-gray-700
+                        hover:text-green-600
+                        hover:bg-green-50
+                        transition-all duration-300
+                      "
+                    >
+                      {ele.content}
+                    </Link>
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
-          
-</div>
 
         </div>
-
-      </div>                
-
-    </nav>
+      </div>
+    </div>
+  </div>
+</nav>
   );
 }

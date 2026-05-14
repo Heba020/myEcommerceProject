@@ -9,6 +9,11 @@ import { NextAuthProvider } from "../Providers/NextAuthProviders";
 import Providers from "../Providers/reactQuery.provider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+});
 
 
 export const metadata : Metadata = {
@@ -32,7 +37,7 @@ export default function RootLayout({
 {
   return (
     <html lang="en">
-      <body className={`${encode.className} antialiased`}>
+      <body className={`${encode.className} antialiased ${inter.className}`}>
         <Providers>
         <Toaster/>
         <NextAuthProvider>
