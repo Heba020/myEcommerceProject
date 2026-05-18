@@ -7,11 +7,11 @@ export async function generateMetadata() {
   };
 }
 export default async function BrandsPage() {
-  const brands: Brand[] = await HandleBrands();
-
+const brands: Brand[] =
+  await HandleBrands() || [];
   return (
     <div className="flex flex-wrap justify-center">
-      {brands.map((brand) => (
+      {Array.isArray(brands) && brands.map((brand) => (
         <BrandItem key={brand._id} brand={brand} />
       ))}
     </div>
