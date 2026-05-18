@@ -3,14 +3,16 @@ import Link  from "next/link";
 import ProductButton80 from "@/src/components/ProductButton80";
 import Image from "next/image";
 import WishList from "./WishList";
-import { GetWishlist } from "../apis/WishList/GetWish.api";
 
 
-export default async function ProductItem({ proplala }: { proplala: ProductType }) {
-  const wishlist = await GetWishlist();
+export default  function ProductItem({
+  proplala,
+  wishlistIds,
+}: {
+  proplala: ProductType;
+  wishlistIds: string[];
+}) {
 
-const wishlistIds =
-  wishlist?.map((item: any) => item._id) || [];
 
   return (
     <div className="xl:w-1/5 lg:w-1/4 md:w-1/3 sm:w-1/2 sm:mx-0 mx-auto"> 

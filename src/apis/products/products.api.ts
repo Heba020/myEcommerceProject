@@ -7,7 +7,7 @@ export async function handleProducts() {
       { next: { revalidate: 60 } },
     );
     const result = await products.json();
-    return result?.data;
+    return result?.data || [];
   } catch (error) {
     return error;
   }
