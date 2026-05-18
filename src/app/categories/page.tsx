@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Category } from "../../interfaces/product.interface";
 import { HandleCategories } from "../../apis/Categories/Categories.api";
 import CategoryItem from "@/src/components/CategoryItem";

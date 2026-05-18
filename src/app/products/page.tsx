@@ -1,7 +1,6 @@
-import React, { Suspense } from 'react'
-import { handleProducts } from '../../apis/products/products.api'
-import { ProductType } from '../../interfaces/product.interface';
-import ProductItem from '../../components/productItem';
+export const dynamic = "force-dynamic";
+
+import { Suspense } from 'react'
 import Loading from '../../scheme/Loading';
 import FeaturedProducts from '../../components/featuredProducts';
 export async function generateMetadata() {

@@ -1,4 +1,3 @@
-import { ca } from "zod/locales";
 
 export async function handleProducts() {
   try {

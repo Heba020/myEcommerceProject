@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import FeaturedProducts from '../components/featuredProducts'
 import { Suspense } from 'react'
 import Loading from '../scheme/Loading'

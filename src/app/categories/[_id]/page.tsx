@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Category } from "../../../interfaces/product.interface"
 import { HandleSpecificCategory } from "../../../apis/Categories/CategoryDetails.api";
 import Image from "next/image";

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +7,6 @@ import { GetWishlist } from "../../apis/WishList/GetWish.api";
 import ProductButton80 from "@/src/components/ProductButton80";
 import DeleteWishlistButton from "../../components/DeleteWishList";
 
-export const dynamic = "force-dynamic";
 export async function generateMetadata() {
   return {
     title: "WishList Page",

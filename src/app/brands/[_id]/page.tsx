@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { HandleSpecificBrand } from "../../../apis/Brands/BrandDetails.api";
 import { Brand } from "@/src/interfaces/product.interface";
 import Image from "next/image";

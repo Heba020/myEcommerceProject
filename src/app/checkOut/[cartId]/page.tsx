@@ -1,4 +1,4 @@
-import React from 'react'
+export const dynamic = "force-dynamic";
 import CheckOutform from '../../../components/CheckOutform'
 
 interface pageProps {
