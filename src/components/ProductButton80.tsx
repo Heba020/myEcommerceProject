@@ -25,7 +25,7 @@ const {mutate, data, isPending}= useMutation({
 
 
   return (
-    <div>      <Button onClick={() => {mutate(id)}} className="cursor-pointer w-[80%] mb-5 font-semibold bg-green-600 hover:bg-green-700">
+    <div>      <Button onClick={() => {mutate(id)}} className="cursor-pointer w-[80%] mb-5 p-5 font-semibold bg-green-600 hover:bg-green-700">
            {isPending? <i className="fas fa-spinner fa-spin"></i>: "Add to cart"} 
           </Button>
           </div>

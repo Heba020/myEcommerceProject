@@ -13,7 +13,7 @@ export default async function OnlinePay(cartId:string,shippingAddress:ShippingAd
     if (!token) {
         throw new Error('User is not authenticated');
       }
-const data = await fetch(`https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000`,
+const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/checkout-session/${cartId}?url=http://localhost:3000`,
     {
         method: 'POST',
         body: JSON.stringify({shippingAddress}),

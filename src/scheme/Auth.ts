@@ -7,12 +7,11 @@ export const authOptions: AuthOptions = {
         Credentials({
             name: "Credentials",
             credentials: {
-                email: { label: "Email", type: "email" },  // ✅ Added labels
-                password: { label: "Password", type: "password" }  // ✅ Added labels
+                email: { label: "Email", type: "email" }, 
+                password: { label: "Password", type: "password" } 
             },
             authorize: async (credentials) => {
-                // This is like asking the server: "Is this person allowed in?"
-                const response = await fetch(`${process.env.API}/auth/signin`, {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
                     method: 'POST',
                     body: JSON.stringify({
                         email: credentials?.email,

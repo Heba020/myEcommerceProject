@@ -1,11 +1,11 @@
 
 
 
-export async function handleSingleProducts(_id: string) {
+export async function HandleBrands() {
   try {
     const products = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products/${_id}`,
-      { next: { revalidate: 60 } },
+      `${process.env.NEXT_PUBLIC_API_URL}/brands`,
+      { next: { revalidate: 60 }},
     );
     const result = await products.json();
     return result?.data;

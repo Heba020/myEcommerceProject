@@ -9,7 +9,7 @@ export default function Footer() {
     <div className="md:flex md:justify-between">
       <div className="mb-6 md:mb-0">
         <a href="https://flowbite.com/" className="flex items-center">
-        <Image width={150} height={100} quality={75} src="\e-images\freshcart-white-logo.svg" alt="freshcart logo" className=""/>
+        <Image width={180} height={100} quality={75} src="/freshcart-white-logo.svg" alt="freshcart logo" className=""/>
         </a>
       </div>
       <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">

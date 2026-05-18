@@ -8,7 +8,11 @@ interface pageProps {
     id: string;
   }>;
 }
-
+export async function generateMetadata() {
+  return {
+    title: "Product's Details",
+  };
+}
 export default function DetailsPage({ params }: pageProps) {
   const { id } = use(params);
   

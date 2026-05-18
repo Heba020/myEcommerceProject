@@ -12,7 +12,7 @@ const token = await getAuthToken();
  }
 
   const data = await fetch
-  (`${process.env.APICart}/${productId}`,
+  (`${process.env.NEXT_PUBLIC_APICart_URL}/${productId}`,
     {
         cache: "no-store",
         method: "DELETE",

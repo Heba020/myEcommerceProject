@@ -6,7 +6,11 @@ interface pageProps {
     cartId: string;
   };
 }
-
+export async function generateMetadata() {
+  return {
+    title: "Check Out",
+  };
+}
 
 export default async function checkOut({params}: pageProps) {
   const {cartId} = await params

@@ -1,7 +1,19 @@
-import React from 'react'
+import { Category } from "../../interfaces/product.interface";
+import { HandleCategories } from "../../apis/Categories/Categories.api";
+import CategoryItem from "@/src/components/CategoryItem";
+export async function generateMetadata() {
+  return {
+    title: "Categories",
+  };
+}
+export default async function CategoriesPage() {
+  const category: Category[] = await HandleCategories();
 
-export default function categories() {
   return (
-    <div>categories</div>
-  )
+    <div className="flex flex-wrap justify-center">
+      {category.map((category) => (
+        <CategoryItem key={category._id} category={category} />
+      ))}
+    </div>
+  );
 }

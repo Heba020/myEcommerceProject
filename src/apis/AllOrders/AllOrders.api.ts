@@ -1,7 +1,7 @@
 export async function getOrders(userId: string) {
 
   const res = await fetch(
-    `https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/orders/user/${userId}`,
     {
       headers: {
         token: localStorage.getItem("userToken") || "",

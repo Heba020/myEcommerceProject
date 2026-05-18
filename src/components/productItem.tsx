@@ -3,9 +3,14 @@ import Link  from "next/link";
 import ProductButton80 from "@/src/components/ProductButton80";
 import Image from "next/image";
 import WishList from "./WishList";
+import { GetWishlist } from "../apis/WishList/GetWish.api";
 
 
-export default function ProductItem({ proplala }: { proplala: ProductType }) {
+export default async function ProductItem({ proplala }: { proplala: ProductType }) {
+  const wishlist = await GetWishlist();
+
+const wishlistIds =
+  wishlist?.map((item: any) => item._id) || [];
 
   return (
     <div className="xl:w-1/5 lg:w-1/4 md:w-1/3 sm:w-1/2 sm:mx-0 mx-auto"> 
@@ -13,8 +18,10 @@ export default function ProductItem({ proplala }: { proplala: ProductType }) {
 <div className="p-5 col justify-self-center">
 
           <div className=" relative rounded-2xl border-gray-200 border overflow-hidden shadow sm:w-full w-[3o0px] ">
-        <WishList/>
-
+<WishList
+  id={proplala._id}
+  initialLiked={wishlistIds.includes(proplala._id)}
+/>
    <Link href={`/productDetails/${proplala._id}`}>
            <div>
          <div>

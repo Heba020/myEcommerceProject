@@ -15,6 +15,9 @@ export default async function FProducts() {
             key={product._id}
           />
         ))}
+        if (!products.length) {
+   <h1>No products found</h1>
+}
     </div>
   );
 }
