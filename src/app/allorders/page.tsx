@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AllOrdersComponent
 from "@/src/components/AllOrders";
 

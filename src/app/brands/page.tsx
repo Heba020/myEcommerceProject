@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Brand } from "../../interfaces/product.interface";
 import BrandItem from "@/src/components/BrandItem";
 import { HandleBrands } from "../../apis/Brands/Brands.api";

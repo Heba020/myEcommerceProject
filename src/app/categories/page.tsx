@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+
+
 import { Category }
 from "../../interfaces/product.interface";
 
@@ -6,6 +9,7 @@ from "../../apis/Categories/Categories.api";
 
 import CategoryItem
 from "@/src/components/CategoryItem";
+
 
 export async function generateMetadata() {
 
