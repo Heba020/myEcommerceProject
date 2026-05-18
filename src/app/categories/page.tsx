@@ -1,19 +1,38 @@
-import { Category } from "../../interfaces/product.interface";
-import { HandleCategories } from "../../apis/Categories/Categories.api";
-import CategoryItem from "@/src/components/CategoryItem";
+import { Category }
+from "../../interfaces/product.interface";
+
+import { HandleCategories }
+from "../../apis/Categories/Categories.api";
+
+import CategoryItem
+from "@/src/components/CategoryItem";
+
 export async function generateMetadata() {
+
   return {
     title: "Categories",
   };
 }
+
 export default async function CategoriesPage() {
-  const category: Category[] = await HandleCategories();
+
+  const categories: Category[] =
+    await HandleCategories() || [];
 
   return (
+
     <div className="flex flex-wrap justify-center">
-      {category.map((category) => (
-        <CategoryItem key={category._id} category={category} />
+
+      {Array.isArray(categories) &&
+        categories.map((category) => (
+
+          <CategoryItem
+            key={category._id}
+            category={category}
+          />
+
       ))}
+
     </div>
   );
 }
