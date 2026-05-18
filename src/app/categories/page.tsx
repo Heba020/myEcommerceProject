@@ -23,13 +23,12 @@ export default async function CategoriesPage() {
 
     <div className="flex flex-wrap justify-center">
 
-      {Array.isArray(categories) &&
-        categories.map((category) => (
+      {categories.map((category) => (
 
-          <CategoryItem
-            key={category._id}
-            category={category}
-          />
+        <CategoryItem
+          key={category._id}
+          category={category}
+        />
 
       ))}
 
