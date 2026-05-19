@@ -41,48 +41,43 @@ export default function LoginForm() {
     }
   });
 
-async function wSubmit(
-  data: loginSchemaValidation
-) {
+  async function wSubmit(
+    data: loginSchemaValidation
+  ) {
 
-  setLoadingSpinner(true);
+    setLoadingSpinner(true);
 
-  const params =
-    new URLSearchParams(window.location.search);
+    const response = await signIn(
+      'credentials',
+      {
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/",
+        redirect: false
+      }
+    );
 
-  const redirect =
-    params.get("redirect");
+    if (response?.ok) {
 
-  const response = await signIn(
-    "credentials",
-    {
-      email: data.email,
-      password: data.password,
-      redirect: false,
+      window.location.href =
+        response.url || "/";
+
+      setLoadingSpinner(false);
+
+      toast.success(
+        "Logged in successfully!"
+      );
+
+    } else {
+
+      setLoadingSpinner(false);
+
+      toast.error(
+        response?.error ||
+        "Login failed. Please check your Password or/and Email."
+      );
     }
-  );
-
-  if (response?.ok) {
-
-    toast.success(
-      "Logged in successfully!"
-    );
-
-    window.location.href =
-      redirect
-        ? `/${redirect}`
-        : "/";
-
-  } else {
-
-    toast.error(
-      response?.error ||
-      "Login failed. Please check your Password or/and Email."
-    );
   }
-
-  setLoadingSpinner(false);
-}
 
   return (
     <>
