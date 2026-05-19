@@ -13,7 +13,7 @@ export default async function OnlinePay(cartId:string,shippingAddress:ShippingAd
     if (!token) {
         throw new Error('User is not authenticated');
       }
-const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/checkout-session/${cartId}?url=https://my-ecommerce-project-phi-bay.vercel.app/`,
+const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/checkout-session/${cartId}?url=https://my-ecommerce-project-phi-bay.vercel.app`,
     {
         method: 'POST',
         body: JSON.stringify({shippingAddress}),
