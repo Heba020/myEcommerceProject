@@ -4,56 +4,38 @@ import { AuthOptions } from "next-auth";
 
 export const authOptions: AuthOptions = {  
     providers: [
-Credentials({
-    name: "Credentials",
+        Credentials({
+            name: "Credentials",
+            credentials: {
+                email: { label: "Email", type: "email" }, 
+                password: { label: "Password", type: "password" } 
+            },
+            authorize: async (credentials) => {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: credentials?.email,
+                        password: credentials?.password,
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
 
-    credentials: {
-        email: {
-            label: "Email",
-            type: "email",
-        },
+                const user = await response.json();
 
-        password: {
-            label: "Password",
-            type: "password",
-        },
-    },
-
-    async authorize(credentials) {
-
-        const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                },
-
-                body: JSON.stringify({
-                    email: credentials?.email,
-                    password: credentials?.password,
-                }),
+                if (user && user.email) {
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name
+                    };
+                } 
+                if (user.message === "success")
+                return user 
+                throw new Error(user.message || "Incorrect email or password");
             }
-        );
-
-        const data = await response.json();
-
-        if (data.message !== "success") {
-            throw new Error(
-                data.message || "Incorrect email or password"
-            );
-        }
-
-        return {
-            id: data.user._id,
-            name: data.user.name || "",
-            email: data.user.email || "",
-            role: "user",
-            token: data.token,
-        }            as any;
-    },
-})
+        })
     ],
     
     pages: {
