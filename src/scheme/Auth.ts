@@ -41,34 +41,20 @@ export const authOptions: AuthOptions = {
     pages: {
         signIn: "/login",},
 
-callbacks: {
-
-  jwt: ({ token, user }) => {
-
-    if (user) {
-
-token.user = {
-  name: user.name || "",
-  email: user.email || "",
-  role: (user as any).role || "user",
-};
-
-      token.accessToken = (user as any).token;
-    }
-
-    return token;
-  },
-
-  session: ({ session, token }) => {
-
-    session.user = token.user as any;
-
-    (session as any).accessToken =
-      token.accessToken;
-
-    return session;
-  },
-},
+    callbacks:{
+        // stamp of approval encrypted code for the user to access protected routes
+        jwt: ({token , user})=> {
+            if(user) { 
+                token.user = user.user;
+                token.token = user.token;
+            } 
+            return token;
+        },
+        // this data appears in cookies so not safe never share .token
+        session: ({session, token}) => {
+            session.user = token.user;
+            return session;
+    }},
     session:{
     strategy:"jwt"
     },
