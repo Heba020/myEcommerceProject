@@ -4,57 +4,89 @@ import { AuthOptions } from "next-auth";
 
 export const authOptions: AuthOptions = {  
     providers: [
-        Credentials({
-            name: "Credentials",
-            credentials: {
-                email: { label: "Email", type: "email" }, 
-                password: { label: "Password", type: "password" } 
-            },
-            authorize: async (credentials) => {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        email: credentials?.email,
-                        password: credentials?.password,
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+Credentials({
+    name: "Credentials",
 
-                const user = await response.json();
+    credentials: {
+        email: {
+            label: "Email",
+            type: "email",
+        },
 
-                if (user && user.email) {
-                    return {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name
-                    };
-                } 
-                if (user.message === "success")
-                return user 
-                throw new Error(user.message || "Incorrect email or password");
+        password: {
+            label: "Password",
+            type: "password",
+        },
+    },
+
+    async authorize(credentials) {
+
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                },
+
+                body: JSON.stringify({
+                    email: credentials?.email,
+                    password: credentials?.password,
+                }),
             }
-        })
+        );
+
+        const data = await response.json();
+
+        if (data.message !== "success") {
+            throw new Error(
+                data.message || "Incorrect email or password"
+            );
+        }
+
+        return {
+            id: data.user._id,
+            name: data.user.name || "",
+            email: data.user.email || "",
+            role: "user",
+            token: data.token,
+        }            as any;
+    },
+})
     ],
     
     pages: {
         signIn: "/login",},
 
-    callbacks:{
-        // stamp of approval encrypted code for the user to access protected routes
-        jwt: ({token , user})=> {
-            if(user) { 
-                token.user = user.user;
-                token.token = user.token;
-            } 
-            return token;
-        },
-        // this data appears in cookies so not safe never share .token
-        session: ({session, token}) => {
-            session.user = token.user;
-            return session;
-    }},
+callbacks: {
+
+  jwt: ({ token, user }) => {
+
+    if (user) {
+
+token.user = {
+  name: user.name || "",
+  email: user.email || "",
+  role: (user as any).role || "user",
+};
+
+      token.accessToken = (user as any).token;
+    }
+
+    return token;
+  },
+
+  session: ({ session, token }) => {
+
+    session.user = token.user as any;
+
+    (session as any).accessToken =
+      token.accessToken;
+
+    return session;
+  },
+},
     session:{
     strategy:"jwt"
     },
