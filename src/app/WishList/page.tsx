@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { GetWishlist } from "../../apis/WishList/GetWish.api";
-import ProductButton80 from "@/src/components/ProductButton80";
+import ProductButton80 from "@/src/components/ProductButton90";
 import DeleteWishlistButton from "../../components/DeleteWishList";
-
+import { Suspense } from "react";
+import Loading from "@/src/auth/Loading";
 export async function generateMetadata() {
   return {
     title: "WishList Page",
@@ -17,7 +18,7 @@ export default async function WishlistPage() {
 
 const wishlist = await GetWishlist() || [];
   return (
-
+<Suspense fallback={<Loading/>}>
     <div className="container mx-auto py-10 min-h-screen px-3 sm:px-5">
 
       {/* Title */}
@@ -25,7 +26,7 @@ const wishlist = await GetWishlist() || [];
 
         <i className="fa-regular fa-heart text-5xl sm:text-7xl text-green-500"></i>
 
-        <h1 className="text-3xl sm:text-5xl font-bold">
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
           My Wishlist
         </h1>
 
@@ -155,5 +156,6 @@ const wishlist = await GetWishlist() || [];
       )}
 
     </div>
+    </Suspense>
   );
 }

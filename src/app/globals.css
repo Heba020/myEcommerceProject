@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 
-
 @custom-variant dark (&:is(.dark *));
 
 @layer components{
@@ -28,7 +27,6 @@
 .main-slider .slick-dots li.slick-active button:before {
   color: #22c55e;
   opacity: 1;
-
 
 }
 
@@ -134,6 +132,7 @@ a:hover {
   opacity: 1;
   transform: translateY(0%);
 }
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

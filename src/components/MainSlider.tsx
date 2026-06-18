@@ -68,11 +68,13 @@ export default function MainSlider() {
               {/* CONTENT */}
               <div
                 className="
+
                   relative
                   z-10
                   max-w-xl
-                  px-6
-                  md:px-12
+                  pe-60
+                  ps-5
+                  lg:px-12
                   text-green-900
                 "
               >

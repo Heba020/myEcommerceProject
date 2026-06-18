@@ -3,49 +3,124 @@
 import { useState } from "react";
 import Image from "next/image";
 
-interface Props {
-  cover: string;
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+
+import type { Swiper as SwiperType } from "swiper";
+
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+
+interface ProductGalleryProps {
+  imageCover: string;
   images: string[];
   title: string;
 }
 
 export default function ProductGallery({
-  cover,
+  imageCover,
   images,
   title,
-}: Props) {
-  const [mainImage, setMainImage] = useState(cover);
+}: ProductGalleryProps) {
+  const [thumbsSwiper, setThumbsSwiper] =
+    useState<SwiperType | null>(null);
+
+  const allImages = [
+    imageCover,
+    ...images.filter((img) => img !== imageCover),
+  ];
 
   return (
-    <div className="w-fit justify-self-center">
-      {/* Top Image */}
-      <Image
-        alt={title}
-        width={300}
-        height={300}
-        src={mainImage}
-        className="mx-auto rounded-lg transition-all duration-300"
-      />
+    <div className="w-[350px] mx-auto my-5">
+      {/* Main Slider */}
+      <div className="relative border border-gray-200 rounded-2xl bg-white overflow-hidden shadow-sm">
+        {/* Previous Button */}
+        <button
+          className="
+            product-prev
+            absolute
+            left-2
+            top-1/2
+            -translate-y-1/2
+            z-10
+            w-10
+            h-10
+            rounded-full
+            bg-white
+            shadow-lg
+            hover:bg-green-700
+            hover:text-white
+            transition-all
+            duration-200
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+          "
+        >
+          <i className="fa-solid fa-chevron-left"></i>
+        </button>
 
-      {/* Bottom Images */}
-      <ul className="flex gap-4 w-fit mx-auto mt-3">
-        {images.map((img) => (
-          <li key={img}>
-            <Image
-              src={img}
-              alt="pic"
-              width={80}
-              height={80}
-              onClick={() => setMainImage(img)}
-              className={`cursor-pointer rounded-md border-2 transition-all duration-200 ${
-                mainImage === img
-                  ? "border-green-500 scale-105"
-                  : "border-transparent"
-              }`}
-            />
-          </li>
-        ))}
-      </ul>
+        {/* Next Button */}
+        <button
+          className="
+            product-next
+            absolute
+            right-2
+            top-1/2
+            -translate-y-1/2
+            z-10
+            w-10
+            h-10
+            rounded-full
+            bg-white
+            shadow-lg
+            hover:bg-green-700
+            hover:text-white
+            transition-all
+            duration-200
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+          "
+        >
+          <i className="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <Swiper
+          navigation={{
+            prevEl: ".product-prev",
+            nextEl: ".product-next",
+          }}
+          thumbs={{
+            swiper:
+              thumbsSwiper &&
+              !thumbsSwiper.destroyed
+                ? thumbsSwiper
+                : null,
+          }}
+          modules={[Navigation, Thumbs]}
+          className="h-[350px]"
+        >
+          {allImages.map((img, index) => (
+            <SwiperSlide key={index}>
+              <div className="flex items-center justify-center h-full p-2">
+                <Image
+                  src={img}
+                  alt={`${title}-${index}`}
+                  width={300}
+                  height={300}
+                  priority={index === 0}
+                  className="h-[350px] w-auto object-contain"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
   );
 }

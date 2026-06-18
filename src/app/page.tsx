@@ -1,19 +1,22 @@
 export const dynamic = "force-dynamic";
-
-import FeaturedProducts from '../components/featuredProducts'
 import { Suspense } from 'react'
-import Loading from '../scheme/Loading'
+import Loading from '../auth/Loading'
 import MainSlider from '../components/MainSlider'
+import ProductsList from '@/src/components/ProductsList';
+import { Category } from "../interfaces/product.interface";
+import { HandleCategories } from "../apis/Categories/Categories.api";
 
-export default function lPage() {
+
+export default async function lPage() {
+      const categories: Category[] = await HandleCategories();
+
   return (
     <div className='mx-10'>
 <Suspense fallback={<Loading />}>
 <div>
   <MainSlider />
   </div>
-
-          <FeaturedProducts />
+  <ProductsList/>
           </Suspense>
     </div>
   )

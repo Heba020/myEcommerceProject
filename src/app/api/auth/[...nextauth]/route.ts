@@ -1,4 +1,4 @@
-import { authOptions } from "@/src/scheme/Auth";
+import { authOptions } from "@/src/auth/Auth";
 import NextAuth from "next-auth";
 
 

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+
 import {
   Form,
   FormItem,
@@ -27,6 +28,14 @@ import { signIn } from 'next-auth/react'
 import Link from "next/link";
 
 import toast from 'react-hot-toast'
+import { Berkshire_Swash }
+from "next/font/google";
+
+const berkshireSwash =
+  Berkshire_Swash({
+    subsets: ["latin"],
+    weight: "400",
+  });
 
 export default function LoginForm() {
 
@@ -78,11 +87,14 @@ export default function LoginForm() {
       );
     }
   }
-
   return (
     <>
-
-      <Form {...form}>
+<div className='mx-auto border border-2 shadow-[0_0_30px_rgba(21,128,61,0.4)] shadow-2xl rounded-2xl py-10 sm:w-[700px] w-[400px]'>
+  <h2 className={` text-5xl text-center mt-5 mb-15 font-bold           ${berkshireSwash.className}
+`}>
+    Welcome Back
+  </h2>
+       <Form {...form}>
 
         <form
           className='w-1/2 mx-auto'
@@ -95,13 +107,21 @@ export default function LoginForm() {
             render={({ field }) => (
               <FormItem>
 
-                <FormLabel>Email</FormLabel>
+                <FormLabel className='font-semibold text-neutral-700'>Email</FormLabel>
 
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="email"
                     {...field}
+                      className="
+    focus-visible:ring-2
+    focus-visible:ring-green-700
+    focus-visible:ring-offset-0
+    focus-visible:border-green-700
+    transition-all
+    duration-200
+  "
                   />
                 </FormControl>
 
@@ -119,7 +139,7 @@ export default function LoginForm() {
             render={({ field }) => (
               <FormItem>
 
-                <FormLabel>Password</FormLabel>
+                <FormLabel className='font-semibold text-neutral-700'>Password</FormLabel>
 
                 <FormControl>
                   <Input
@@ -127,6 +147,14 @@ export default function LoginForm() {
                     placeholder="password"
                     {...field}
                     autoComplete='off'
+                      className="
+    focus-visible:ring-2
+    focus-visible:ring-green-700
+    focus-visible:ring-offset-0
+    focus-visible:border-green-700
+    transition-all
+    duration-200
+  "
                   />
                 </FormControl>
 
@@ -140,7 +168,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            className='bg-green-400 hover:bg-green-200 hover:text-black ms-auto block text-white'
+            className='bg-green-700 hover:bg-green-200 cursor-pointer  hover:border-green-700 border hover:text-black block text-white'
           >
 
             {LoadingSpinner ? (
@@ -150,24 +178,24 @@ export default function LoginForm() {
             )}
 
           </Button>
+          
+          <Link href="/forgot-password">
+            <Button
+              className="bg-green-700 text-sm text-white cursor-pointer   hover:text-black hover:bg-green-200 hover:border-green-700 border mt-3"
+            >
 
-          <Button
-            className="bg-green-400 text-sm hover:bg-green-200 mt-3"
-          >
 
-            <Link href="/forgot-password">
+                  Forgot Password ?
 
-              <p className='text-white hover:text-black'>
-                Forgot Password
-              </p>
 
-            </Link>
-
-          </Button>
+            </Button>
+          </Link>
 
         </form>
 
-      </Form>
+      </Form> 
+</div>
+
 
     </>
   );

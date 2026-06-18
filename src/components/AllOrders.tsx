@@ -3,37 +3,21 @@
 import { useQuery }
 from "@tanstack/react-query";
 
-import Loading
-from "./Loading";
-
+import Loading from "@/src/auth/Loading";
+import { Suspense } from "react";
+import { getOrders } from "@/src/apis/AllOrders/AllOrders.api";
 export default function AllOrdersComponent() {
 
   // GET ORDERS
-  const {
-    data,
-    isLoading,
-    isError,
-    error
-  } = useQuery({
-
-    queryKey: ["orders"],
-
-    queryFn: async () => {
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/orders/`
-      );
-
-      if (!res.ok) {
-
-        throw new Error(
-          "Failed to fetch orders"
-        );
-      }
-
-      return res.json();
-    },
-  });
+const {
+  data,
+  isLoading,
+  isError,
+  error
+} = useQuery({
+  queryKey: ["orders"],
+  queryFn: getOrders,
+});
 
   if (isLoading) {
     return <Loading />;
@@ -42,21 +26,39 @@ export default function AllOrdersComponent() {
   if (isError) {
 
     return (
-      <h2
-        className="
-          text-center
-          text-red-500
-          mt-10
-          text-xl
-        "
-      >
-        {(error as Error).message}
-      </h2>
+        <div className="text-center py-20">
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+
+            <i className="fa-regular fa-face-sad-cry text-7xl sm:text-9xl text-neutral-500"></i>
+
+            <div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold mt-2">
+                No Orders Yet?
+              </h2>
+
+              <p className="text-gray-500 mt-3 text-sm sm:text-base">
+                Get the products you love.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
     );
   }
 
-  return (
+  const sortedOrders = [...(data || [])].sort(
+  (a, b) =>
+    new Date(b.createdAt).getTime() -
+    new Date(a.createdAt).getTime()
+);
 
+return (
+  <Suspense fallback={<Loading />}>
     <div
       className="
         max-w-screen-2xl
@@ -66,16 +68,15 @@ export default function AllOrdersComponent() {
         py-8
       "
     >
-
       {/* HEADER */}
       <div className="mb-8">
-
         <h1
           className="
-            text-3xl
-            sm:text-4xl
-            font-bold
+            text-center
             text-gray-900
+            text-4xl
+            sm:text-5xl
+            font-bold
           "
         >
           All Orders
@@ -83,378 +84,373 @@ export default function AllOrdersComponent() {
 
         <p
           className="
+            text-center
             text-sm
             text-gray-500
             mt-2
           "
         >
-          Total Orders: {data?.results}
+          Total Orders: {sortedOrders.length}
         </p>
-
       </div>
 
-      {/* ORDERS */}
-      <div className="space-y-8">
+      {/* EMPTY STATE */}
+      {sortedOrders.length === 0 ? (
+        <div
+          className="
+            bg-white
+            rounded-3xl
+            border
+            border-gray-200
+            shadow-sm
+            py-20
+            px-6
+            text-center
+          "
+        >
+          <div className="text-6xl mb-4">
+            📦
+          </div>
 
-        {data?.data?.map(
-          (order: any) => (
-
-          <div
-            key={order._id}
+          <h2
             className="
-              bg-white
-              border
-              border-gray-200
-              rounded-3xl
-              shadow-sm
-              overflow-hidden
+              text-2xl
+              font-bold
+              text-gray-900
             "
           >
+            No Orders Yet
+          </h2>
 
-            {/* ORDER TOP */}
+          <p
+            className="
+              text-gray-500
+              mt-3
+              max-w-md
+              mx-auto
+            "
+          >
+            You haven't placed any orders yet.
+            Start shopping and your orders
+            will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {sortedOrders.map((order: any) => (
             <div
+              key={order._id}
               className="
-                flex
-                flex-col
-                lg:flex-row
-                lg:items-center
-                lg:justify-between
-                gap-4
-                p-5
-                border-b
+                bg-white
+                border
                 border-gray-200
-                bg-gray-50
+                rounded-3xl
+                shadow-sm
+                overflow-hidden
               "
             >
-
-              {/* LEFT */}
-              <div>
-
-                <h2
-                  className="
-                    text-lg
-                    font-bold
-                    text-gray-900
-                  "
-                >
-                  Order #{order.id}
-                </h2>
-
-                <div
-                  className="
-                    flex
-                    flex-wrap
-                    items-center
-                    gap-3
-                    mt-2
-                    text-sm
-                    text-gray-500
-                  "
-                >
-
-                  <span>
-                    {new Date(
-                      order.createdAt
-                    ).toLocaleDateString()}
-                  </span>
-
-                  <span
-                    className="
-                      w-[1px]
-                      h-4
-                      bg-gray-300
-                    "
-                  ></span>
-
-                  <span>
-                    {order.paymentMethodType}
-                  </span>
-
-                </div>
-
-              </div>
-
-              {/* RIGHT */}
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  flex-wrap
-                "
-              >
-
-                {/* PAID */}
-                <span
-                  className={`
-                    px-4
-                    py-1.5
-                    rounded-full
-                    text-xs
-                    font-semibold
-                    ${
-                      order.isPaid
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }
-                  `}
-                >
-                  {order.isPaid
-                    ? "Paid"
-                    : "Unpaid"}
-                </span>
-
-                {/* DELIVERY */}
-                <span
-                  className={`
-                    px-4
-                    py-1.5
-                    rounded-full
-                    text-xs
-                    font-semibold
-                    ${
-                      order.isDelivered
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }
-                  `}
-                >
-                  {order.isDelivered
-                    ? "Delivered"
-                    : "Pending Delivery"}
-                </span>
-
-              </div>
-
-            </div>
-
-            {/* PRODUCTS */}
-            <div className="p-5 space-y-5">
-
-              {order.cartItems.map(
-                (
-                  item: any,
-                  index: number
-                ) => (
-
-                <div
-                  key={item._id}
-                  className={`
-                    flex
-                    gap-4
-                    ${
-                      index !==
-                      order.cartItems.length - 1
-                        ? "border-b border-gray-100 pb-5"
-                        : ""
-                    }
-                  `}
-                >
-
-                  {/* IMAGE */}
-                  <div
-                    className="
-                      w-[90px]
-                      h-[90px]
-
-                      sm:w-[110px]
-                      sm:h-[110px]
-
-                      bg-gray-100
-                      rounded-2xl
-                      overflow-hidden
-                      shrink-0
-                    "
-                  >
-
-                    <img
-                      src={
-                        item.product.imageCover
-                      }
-                      alt={
-                        item.product.title
-                      }
-                      className="
-                        w-full
-                        h-full
-                        object-cover
-                      "
-                    />
-
-                  </div>
-
-                  {/* CONTENT */}
-                  <div
-                    className="
-                      flex-1
-                      min-w-0
-                    "
-                  >
-
-                    <h3
-                      className="
-                        text-sm
-                        sm:text-base
-                        font-semibold
-                        text-gray-900
-                        truncate
-                      "
-                    >
-                      {item.product.title}
-                    </h3>
-
-                    {/* CATEGORY */}
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        sm:text-sm
-                        text-gray-500
-                      "
-                    >
-                      {
-                        item.product.category.name
-                      }
-                    </p>
-
-                    {/* BRAND */}
-                    <p
-                      className="
-                        mt-1
-                        text-xs
-                        sm:text-sm
-                        text-gray-500
-                      "
-                    >
-                      Brand:
-                      {" "}
-                      {
-                        item.product.brand.name
-                      }
-                    </p>
-
-                    {/* PRICE */}
-                    <div
-                      className="
-                        mt-3
-                        flex
-                        flex-wrap
-                        items-center
-                        gap-3
-                        text-sm
-                      "
-                    >
-
-                      <span
-                        className="
-                          font-semibold
-                          text-gray-900
-                        "
-                      >
-                        {item.price} EGP
-                      </span>
-
-                      <span
-                        className="
-                          w-[1px]
-                          h-4
-                          bg-gray-300
-                        "
-                      ></span>
-
-                      <span
-                        className="
-                          text-gray-500
-                        "
-                      >
-                        Qty:
-                        {" "}
-                        {item.count}
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-
-            {/* FOOTER */}
-            <div
-              className="
-                border-t
-                border-gray-200
-                bg-gray-50
-                p-5
-              "
-            >
-
+              {/* ORDER TOP */}
               <div
                 className="
                   flex
                   flex-col
                   sm:flex-row
-                  sm:items-center
-                  sm:justify-between
+                  justify-between
                   gap-4
+                  p-5
+                  border-b
+                  border-gray-200
+                  bg-gray-50
                 "
               >
+                {/* LEFT */}
+                <div className="flex gap-4">
+                  <span   className="
+                      text-lg
+                      font-bold
+                      text-gray-900
+                    ">
 
-                {/* SHIPPING */}
+                    Order #{order.id}
+                  </span>
+                    <span
+                      className="
+                        w-[1px]
+                        h-6
+                        bg-gray-300
+                      "
+                    ></span>
+                <div
+                    className="
+                    mt-1.5
+                      text-sm
+                      text-gray-500
+                    "
+                  >
+                    <span>
+                      {new Date(
+                        order.createdAt
+                      ).toLocaleDateString()}
+                    </span>
+
+
+                  </div>
+                </div>
+                
+
+                {/* RIGHT */}
                 <div
                   className="
-                    space-y-1
-                    text-sm
-                    text-gray-500
+                    flex
+                    items-center
+                    gap-3
+                    flex-wrap
                   "
                 >
+                  <span
+                    className={`
+                      px-4
+                      py-1.5
+                      rounded-full
+                      text-xs
+                      font-semibold
+                      ${
+                        order.isPaid
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }
+                    `}
+                  >
+                    {order.isPaid
+                      ? "Paid"
+                      : "Unpaid"}
+                  </span>
 
-                  <p>
-                    Shipping:
-                    {" "}
-                    {order.shippingPrice}
-                    {" "}
-                    EGP
-                  </p>
-
-                  <p>
-                    Tax:
-                    {" "}
-                    {order.taxPrice}
-                    {" "}
-                    EGP
-                  </p>
+                  <span
+                    className={`
+                      px-4
+                      py-1.5
+                      rounded-full
+                      text-xs
+                      font-semibold
+                      ${
+                        order.isDelivered
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }
+                    `}
+                  >
+                    {order.isDelivered
+                      ? "Delivered"
+                      : "Pending Delivery"}
+                  </span>
 
                 </div>
-
-                {/* TOTAL */}
-                <div
-                  className="
-                    text-2xl
-                    font-bold
-                    text-green-600
-                  "
-                >
-
-                  {order.totalOrderPrice}
-                  {" "}
-                  EGP
-
-                </div>
-
               </div>
 
+              {/* PRODUCTS */}
+              <div className="p-5 space-y-5">
+                {order.cartItems.map(
+                  (
+                    item: any,
+                    index: number
+                  ) => (
+                    <div
+                      key={item._id}
+                      className={`
+                        flex
+                        gap-4
+                        ${
+                          index !==
+                          order.cartItems.length -
+                            1
+                            ? "border-b border-gray-100 pb-5"
+                            : ""
+                        }
+                      `}
+                    >
+                      {/* IMAGE */}
+                      <div
+                        className="
+                          w-[90px]
+                          h-[90px]
+                          sm:w-[110px]
+                          sm:h-[110px]
+                          bg-gray-100
+                          rounded-2xl
+                          overflow-hidden
+                          shrink-0
+                        "
+                      >
+                        <img
+                          src={
+                            item.product
+                              .imageCover
+                          }
+                          alt={
+                            item.product.title
+                          }
+                          className="
+                            w-full
+                            h-full
+                            object-cover
+                          "
+                        />
+                      </div>
+
+                      {/* CONTENT */}
+                      <div
+                        className="
+                          flex-1
+                          min-w-0
+                        "
+                      >
+                        <h3
+                          className="
+                            text-sm
+                            sm:text-base
+                            font-semibold
+                            text-gray-900
+                            truncate
+                          "
+                        >
+                          {
+                            item.product.title
+                          }
+                        </h3>
+
+                        <p
+                          className="
+                            mt-1
+                            text-xs
+                            sm:text-sm
+                            text-gray-500
+                          "
+                        >
+                          {
+                            item.product
+                              .category.name
+                          }
+                        </p>
+
+                        <p
+                          className="
+                            mt-1
+                            text-xs
+                            sm:text-sm
+                            text-gray-500
+                          "
+                        >
+                          Brand:{" "}
+                          {
+                            item.product
+                              .brand.name
+                          }
+                        </p>
+
+                        <div
+                          className="
+                            mt-3
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-3
+                            text-sm
+                          "
+                        >
+                          <span
+                            className="
+                              font-semibold
+                              text-gray-900
+                            "
+                          >
+                            {item.price}
+                            {" "}
+                            EGP
+                          </span>
+
+                          <span
+                            className="
+                              w-[1px]
+                              h-4
+                              bg-gray-300
+                            "
+                          ></span>
+
+                          <span
+                            className="
+                              text-gray-500
+                            "
+                          >
+                            Qty:{" "}
+                            {item.count}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+
+              {/* FOOTER */}
+              <div
+                className="
+                  border-t
+                  border-gray-200
+                  bg-gray-50
+                  p-5
+                "
+              >
+                <div
+                  className="
+                    flex
+                    flex-col
+                    sm:flex-row
+                    sm:items-center
+                    sm:justify-between
+                    gap-4
+                  "
+                >
+                  <div
+                    className="
+                      space-y-1
+                      text-sm
+                      text-gray-500
+                    "
+                  >
+                    <p>
+                      Shipping:{" "}
+                      {
+                        order.shippingPrice
+                      }{" "}
+                      EGP
+                    </p>
+
+                    <p>
+                      Tax:{" "}
+                      {order.taxPrice} EGP
+                    </p>
+                  </div>
+
+                  <div
+                    className="
+                      text-2xl
+                      font-bold
+                      text-green-600
+                    "
+                  >
+                    {
+                      order.totalOrderPrice
+                    }{" "}
+                    EGP
+                  </div>
+                </div>
+              </div>
             </div>
-
-          </div>
-
-        ))}
-
-      </div>
-
+          ))}
+        </div>
+      )}
     </div>
-  );
+  </Suspense>
+);
 }

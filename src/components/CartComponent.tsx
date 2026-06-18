@@ -6,7 +6,10 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { useState } from "react";
+import {
+  useState,
+  useCallback,
+} from "react";
 
 import Link from "next/link";
 
@@ -38,25 +41,36 @@ export default function CartComponent() {
     setLoadingId
   ] = useState<null | string>(null);
 
+  // updating them memo
+  const [
+  updatingId,
+  setUpdatingId,
+] = useState<string | null>(null);
+
   // GET CART
-  const {
-    data,
-    isError,
-    isLoading,
-    error,
-  } = useQuery<CartResponse>({
+ const {
+  data,
+  isError,
+  isLoading,
+  error,
+} = useQuery<CartResponse>({
+  queryKey: ["cart"],
 
-    queryKey: ["cart"],
+  queryFn: async () => {
+    const res = await fetch("/api/cart");
 
-    queryFn: async () => {
+    if (!res.ok) {
+      throw new Error(
+        "Failed to fetch cart"
+      );
+    }
 
-      const res = await fetch("/api/cart");
+    return res.json();
+  },
 
-      const data = await res.json();
-
-      return data;
-    },
-  });
+  staleTime: 1000 * 60 * 5,
+  gcTime: 1000 * 60 * 10,
+});
 
   // DELETE ITEM
   const {
@@ -75,19 +89,83 @@ export default function CartComponent() {
   });
 
   // UPDATE ITEM
-  const {
-    mutate: UpdateMutate,
-  } = useMutation({
+const {
+  mutate: UpdateMutate,
+  isPending: updatePending,
+} = useMutation({
+  mutationFn: updateCart,
 
-    mutationFn: updateCart,
+  onMutate: async ({
+    productId,
+    count,
+  }: {
+    productId: string;
+    count: number;
+  }) => {
+    setUpdatingId(productId);
 
-    onSuccess: () => {
+    await queryClient.cancelQueries({
+      queryKey: ["cart"],
+    });
 
-      queryClient.invalidateQueries({
-        queryKey: ["cart"],
-      });
-    },
-  });
+    const previousCart =
+      queryClient.getQueryData<CartResponse>(
+        ["cart"]
+      );
+
+    queryClient.setQueryData<CartResponse>(
+      ["cart"],
+      (old) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+
+          data: {
+            ...old.data,
+
+            products:
+              old.data.products.map(
+                (item) =>
+                  item.product._id ===
+                  productId
+                    ? {
+                        ...item,
+                        count,
+                      }
+                    : item
+              ),
+          },
+        };
+      }
+    );
+
+    return {
+      previousCart,
+    };
+  },
+
+  onError: (
+    _error,
+    _variables,
+    snapshot
+  ) => {
+    if (snapshot?.previousCart) {
+      queryClient.setQueryData(
+        ["cart"],
+        snapshot.previousCart
+      );
+    }
+  },
+
+  onSettled: () => {
+    setUpdatingId(null);
+
+    queryClient.invalidateQueries({
+      queryKey: ["cart"],
+    });
+  },
+});
 
   // CLEAR CART
   const {
@@ -106,29 +184,34 @@ export default function CartComponent() {
   });
 
   // DELETE HANDLER
-  function handleDelete(
-    productId: string
-  ) {
+const handleDelete =
+  useCallback(
+    (productId: string) => {
+      setLoadingId(productId);
 
-    setLoadingId(productId);
-
-    delMutate(productId);
-  }
+      delMutate(productId);
+    },
+    [delMutate]
+  );
 
   // UPDATE HANDLER
-  function handleUpdate(
+const handleUpdate = useCallback(
+  (
     productId: string,
     count: number
-  ) {
-
-    if (count < 1) return;
+  ) => {
+    if (count <= 0) {
+      handleDelete(productId);
+      return;
+    }
 
     UpdateMutate({
       productId,
       count,
     });
-  }
-
+  },
+  [UpdateMutate, handleDelete]
+);
   // TOTAL ITEMS
   const totalItems =
     data?.data.products.reduce(
@@ -346,7 +429,7 @@ export default function CartComponent() {
                         className="
                           w-full
                           h-full
-                          object-cover
+                          object-contain
                         "
                       />
 
@@ -491,12 +574,17 @@ export default function CartComponent() {
 
                           {/* MINUS */}
                           <button
-                            onClick={() =>
-                              handleUpdate(
-                                product.product._id,
-                                product.count - 1
-                              )
-                            }
+  disabled={
+    updatePending &&
+    updatingId ===
+      product.product._id
+  }
+  onClick={() =>
+    handleUpdate(
+      product.product._id,
+      product.count - 1
+    )
+  }
                             className="
                               px-3
                               py-1.5
@@ -509,24 +597,43 @@ export default function CartComponent() {
                           </button>
 
                           {/* COUNT */}
-                          <span
-                            className="
-                              px-4
-                              text-sm
-                              font-medium
-                            "
-                          >
-                            {product.count}
-                          </span>
+<span
+  className="
+    px-4
+    text-sm
+    font-medium
+    min-w-[40px]
+    text-center
+  "
+>
+  {updatePending &&
+  updatingId ===
+    product.product._id ? (
+    <i
+      className="
+        fa-solid
+        fa-spinner
+        fa-spin
+      "
+    />
+  ) : (
+    product.count
+  )}
+</span>
 
                           {/* PLUS */}
                           <button
-                            onClick={() =>
-                              handleUpdate(
-                                product.product._id,
-                                product.count + 1
-                              )
-                            }
+ disabled={
+    updatePending &&
+    updatingId ===
+      product.product._id
+  }
+  onClick={() =>
+    handleUpdate(
+      product.product._id,
+      product.count + 1
+    )
+  }
                             className="
                               px-3
                               py-1.5

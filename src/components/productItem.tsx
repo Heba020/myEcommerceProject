@@ -1,6 +1,6 @@
 import { ProductType } from "../interfaces/product.interface";
 import Link  from "next/link";
-import ProductButton80 from "@/src/components/ProductButton80";
+import ProductButton80 from "@/src/components/ProductButton90";
 import Image from "next/image";
 import WishList from "./WishList";
 import { GetWishlist } from "../apis/WishList/GetWish.api";
@@ -17,11 +17,10 @@ const wishlistIds =
 
 <div className="p-5 col justify-self-center">
 
-          <div className=" relative rounded-2xl border-gray-200 border overflow-hidden shadow sm:w-full w-[3o0px] ">
+<div className="relative rounded-2xl border-gray-200 border overflow-hidden shadow sm:w-full w-[300px]">
 <WishList
   id={proplala._id}
-  initialLiked={wishlistIds.includes(proplala._id)}
-/>
+  initialLiked={wishlistIds.includes(proplala._id) }/>
    <Link href={`/productDetails/${proplala._id}`}>
            <div>
          <div>

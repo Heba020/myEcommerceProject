@@ -1,5 +1,6 @@
 import Credentials from "next-auth/providers/credentials";
 import { AuthOptions } from "next-auth";  
+import { jwtDecode } from "jwt-decode";
 
 
 export const authOptions: AuthOptions = {  
@@ -24,6 +25,7 @@ export const authOptions: AuthOptions = {
 
                 const user = await response.json();
 
+
                 if (user && user.email) {
                     return {
                         id: user.id,
@@ -47,6 +49,10 @@ export const authOptions: AuthOptions = {
             if(user) { 
                 token.user = user.user;
                 token.token = user.token;
+
+                const decoded = jwtDecode<{ id: string }>(user.token);
+
+                token.userId = decoded.id;
             } 
             return token;
         },

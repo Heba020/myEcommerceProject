@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { addToWishlist } from "../apis/WishList/AddWishlist.api";
 import { RemoveWishlist } from "../apis/WishList/RemoveWishList.api";
@@ -16,6 +16,11 @@ export default function WishList({
 
   const [liked, setLiked] = useState(initialLiked);
   const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    setLiked(initialLiked);
+  }, [initialLiked]);
+
 
   async function handleWishlist() {
 
@@ -56,7 +61,7 @@ export default function WishList({
   return (
     <button
       onClick={handleWishlist}
-      className="absolute top-3 right-3 z-20"
+      className=" absolute top-3 left-3 cursor-pointer z-30"
     >
 
       {loading ? (

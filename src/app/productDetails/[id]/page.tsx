@@ -1,5 +1,5 @@
 import { Suspense, use } from "react";
-import Loading from "@/src/scheme/Loading";
+import Loading from "@/src/auth/Loading";
 import ProductDetails from "../../../components/ProductDetails";
 import { handleSingleProducts } from "../../../apis/products/singleProduct.api";
 

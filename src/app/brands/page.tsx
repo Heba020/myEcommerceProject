@@ -1,21 +1,42 @@
-export const dynamic = "force-dynamic";
+import Link from "next/link";
+import { HandleBrands } from "@/src/apis/Brands/Brands.api";
+import { Brand } from "@/src/interfaces/cart.interface";
 
-import { Brand } from "../../interfaces/product.interface";
-import BrandItem from "@/src/components/BrandItem";
-import { HandleBrands } from "../../apis/Brands/Brands.api";
-export async function generateMetadata() {
-  return {
-    title: "Brands",
-  };
-}
 export default async function BrandsPage() {
-const brands: Brand[] =
-  await HandleBrands() || [];
+  const brands = await HandleBrands();
+
   return (
-    <div className="flex flex-wrap justify-center">
-      {Array.isArray(brands) && brands.map((brand) => (
-        <BrandItem key={brand._id} brand={brand} />
-      ))}
+    <div className="container py-4">
+      <h1 className="text-3xl font-bold mb-8">
+        Brands
+      </h1>
+
+      <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+        {brands.map((brand:Brand) => (
+
+          <Link
+            key={brand._id}
+            href={`/brands/${brand._id}`}
+          >
+            <div className="border rounded-xl p-6 hover:shadow-lg transition">
+
+              <img
+                src={brand.image}
+                alt={brand.name}
+                className="w-full h-32 object-contain"
+              />
+
+              <h2 className="font-bold text-center mt-4">
+                {brand.name}
+              </h2>
+
+            </div>
+          </Link>
+
+        ))}
+
+      </div>
     </div>
   );
 }
