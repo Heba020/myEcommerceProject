@@ -31,6 +31,7 @@ from "../apis/cart/update-cart.api";
 import { ClearCart }
 from "../apis/cart/Clear-cart.api";
 
+
 export default function CartComponent() {
 
   const queryClient = useQueryClient();
@@ -418,20 +419,18 @@ const handleUpdate = useCallback(
                         overflow-hidden
                       "
                     >
-
-                      <img
-                        src={
-                          product.product.imageCover
-                        }
-                        alt={
-                          product.product.title
-                        }
-                        className="
-                          w-full
-                          h-full
-                          object-contain
-                        "
-                      />
+                        <Link href={`/productDetails/${product.product._id}`}>
+                          <img
+                            src={product.product.imageCover}
+                            alt={product.product.title}
+                            className="
+                              w-full
+                              h-full
+                              object-contain
+                              cursor-pointer
+                            "
+                          />
+                        </Link>
 
                     </div>
 

@@ -72,14 +72,9 @@ export default function CartCounterFull({
         flex
         items-center
         justify-between
-
-        bg-green-50
-        border border-green-200
-
+        bg-green-100
+        border-2 border-green-600
         rounded-xl
-
-        px-3 py-2
-
         w-full
         mx-auto
       "
@@ -88,14 +83,17 @@ export default function CartCounterFull({
         onClick={decrease}
         disabled={isPending}
         className="
-          w-8 h-8
+          w-10 h-9
           rounded-lg
-
           bg-white
-          border border-green-300
-cursor-pointer
-
-          hover:bg-green-100
+          border-r-2 border-green-600 
+          border-l-0
+          
+          cursor-pointer
+        text-green-700
+        font-bold
+        hover:bg-green-200 
+          transition-all duration-300  
         "
       >
         -
@@ -104,7 +102,7 @@ cursor-pointer
       <span
         className="
           font-bold
-          text-green-600 pointer-events-none
+          text-green-700 pointer-events-none
         "
       >
         {isPending ? (
@@ -118,13 +116,16 @@ cursor-pointer
         onClick={increase}
         disabled={isPending}
         className="
-          w-8 h-8
+   w-10 h-9
           rounded-lg
-cursor-pointer
           bg-white
-          border border-green-300
-
-          hover:bg-green-100
+          border-l-2 border-green-600 
+          border-r-0
+          cursor-pointer
+        text-green-700
+        font-bold
+        hover:bg-green-200 
+          transition-all duration-300  
         "
       >
         +

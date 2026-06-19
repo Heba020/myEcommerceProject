@@ -133,6 +133,19 @@ a:hover {
   transform: translateY(0%);
 }
 
+.yarl__root {
+  --yarl__color_backdrop: rgba(0, 0, 0, 0.9);
+  --yarl__color_button: #15f968; /* Green-600 */
+  --yarl__color_button_active: #15803d; /* Green-700 */
+}
+
+.yarl__button {
+  color: #16a34a !important;
+}
+
+.yarl__button:hover {
+  color: #52f48d !important;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

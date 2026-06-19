@@ -133,7 +133,8 @@ export default function ProductsList() {
                           alt={product.title}
                           className="
                             w-full
-                            h-[220px]
+                            md:h-[220px]
+                            h-[200px]
                             object-contain
                             justify-self-center
                           "
@@ -144,7 +145,7 @@ export default function ProductsList() {
                       <div className="m-3">
                         <p
                           className="
-                            my-2
+                            mb-2
                             font-bold
                             text-green-500
                             line-clamp-1
@@ -156,21 +157,22 @@ export default function ProductsList() {
                         <p
                           className={
                             product.description
-                              .length <= 50
+                              .length <= 30
                               ? "h-[2.5rem] text-sm text-gray-500"
-                              : "text-sm text-gray-500 line-clamp-2"
+                              : "text-sm text-gray-500 whitespace-normal line-clamp-2"
                           }
                         >
-                          {product.description}
-                        </p>
+                    {product.description.replace(/[\r\n]+/g, " ")}    
+                    </p>
 
                         <div
                           className="
+                            bg-white
                             flex
                             justify-between
                             items-start
-                            my-2
-                            h-[40px]
+                            my-3
+                            h-[35px]
                           "
                         >
                           <div
@@ -216,7 +218,7 @@ export default function ProductsList() {
                                 fa-star
                                 text-yellow-500
                                 ms-1
-                              "
+                             "
                             ></i>
                           </span>
                         </div>
@@ -225,7 +227,7 @@ export default function ProductsList() {
                   </Link>
 
                   {/* CART ACTION */}
-                  <div className="text-center pb-3">
+                  <div className="text-center">
                     {cartItem ? (
                       <CartCounter
                         productId={

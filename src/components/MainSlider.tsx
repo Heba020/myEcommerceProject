@@ -1,6 +1,8 @@
 'use client'
 
 import Slider from "react-slick";
+import Link from "next/link";
+
 
 export default function MainSlider() {
 
@@ -17,12 +19,12 @@ export default function MainSlider() {
 
   const slides = [
     {
-      image: "/slide-1.jpg",
+      image: "/Shopping-2.png",
       title: "Fresh Summer Collection",
       desc: "Discover the latest trends with premium quality.",
     },
     {
-      image: "/slider-2.jpg",
+      image: "/electronics-2.png",
       title: "Exclusive Deals",
       desc: "Shop now and enjoy amazing discounts today.",
     },
@@ -33,7 +35,6 @@ export default function MainSlider() {
     <div
       className="
         main-slider
-        ms-5
         mb-5
         overflow-hidden
         rounded-3xl
@@ -62,19 +63,20 @@ export default function MainSlider() {
               "
               style={{
                 backgroundImage: `url(${slide.image})`,
+                backgroundPosition: "58% center",
               }}
             >
 
               {/* CONTENT */}
               <div
                 className="
-
                   relative
                   z-10
                   max-w-xl
                   pe-60
                   ps-5
                   lg:px-12
+                  md:px-5
                   text-green-900
                 "
               >
@@ -87,24 +89,26 @@ export default function MainSlider() {
                   {slide.desc}
                 </p>
 
-                <button
-                  className="
-                    mt-5
-                    rounded-xl
-                    bg-green-900
-                    px-6
-                    py-3
-                    text-white
-                    font-bold
-                    hover:bg-green-600
-                    transition-all
-                    duration-300
-                    cursor-pointer
-                    shadow-lg
-                  "
-                >
-                  Shop Now
-                </button>
+                  <Link href="/">
+                    <button
+                      className="
+                        mt-6
+                        rounded-xl
+                        bg-green-900
+                        px-4
+                        py-2
+                        text-white
+                        font-bold
+                        hover:bg-green-600
+                        transition-all
+                        duration-300
+                        cursor-pointer
+                        shadow-lg
+                      "
+                    >
+                      Shop Now
+                    </button>
+                  </Link>
 
               </div>
 

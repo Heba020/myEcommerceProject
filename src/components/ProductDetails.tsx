@@ -27,7 +27,7 @@ const wishlistIds =
 return (
 <div className="container px-10 py-2 grid lg:grid-cols-3 md:grid-cols-2 gap-6 items-center">
 
-  <div className=" relative w-fit justify-self-center md:col-span-1">
+  <div className=" relative justify-self-center md:col-span-1">
  <ProductGallery  imageCover={data.imageCover} images={data.images} title={data.title} />
 <div className="absolute top-5 left-0.5">
     <WishList id={data._id} initialLiked={wishlistIds.includes(data._id)} />

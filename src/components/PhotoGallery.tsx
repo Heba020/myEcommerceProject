@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
-
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/styles.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
@@ -27,13 +29,16 @@ export default function ProductGallery({
   const [thumbsSwiper, setThumbsSwiper] =
     useState<SwiperType | null>(null);
 
+  const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0); 
+
   const allImages = [
     imageCover,
     ...images.filter((img) => img !== imageCover),
   ];
 
   return (
-    <div className="w-[350px] mx-auto my-5">
+    <div className="md-[350px] w-[300px] mx-auto my-5">
       {/* Main Slider */}
       <div className="relative border border-gray-200 rounded-2xl bg-white overflow-hidden shadow-sm">
         {/* Previous Button */}
@@ -107,7 +112,8 @@ export default function ProductGallery({
         >
           {allImages.map((img, index) => (
             <SwiperSlide key={index}>
-              <div className="flex items-center justify-center h-full p-2">
+              <div className="flex items-center justify-center h-full p-2 cursor-zoom-in"
+               onClick={() => {setCurrentIndex(index); setOpen(true);}}>
                 <Image
                   src={img}
                   alt={`${title}-${index}`}
@@ -117,10 +123,20 @@ export default function ProductGallery({
                   className="h-[350px] w-auto object-contain"
                 />
               </div>
+              
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper>    
       </div>
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        index={currentIndex}
+        plugins={[Zoom]}
+        slides={allImages.map((img) => ({
+          src: img,
+        }))}
+      />
     </div>
   );
 }

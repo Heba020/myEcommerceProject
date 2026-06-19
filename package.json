@@ -31,11 +31,13 @@
     "react-hook-form": "^7.71.2",
     "react-hot-toast": "^2.6.0",
     "react-is": "^18.3.1",
+    "react-medium-image-zoom": "^5.4.8",
     "react-slick": "^0.31.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^12.2.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss-animate": "^1.0.7",
+    "yet-another-react-lightbox": "^3.32.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
